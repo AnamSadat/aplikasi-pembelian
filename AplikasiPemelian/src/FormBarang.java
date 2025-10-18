@@ -4,6 +4,7 @@
  */
 
 import javax.swing.JOptionPane;
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,6 +13,11 @@ import java.sql.PreparedStatement;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import java.net.URL;
+import javax.swing.ImageIcon;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 
 /**
  *
@@ -62,8 +68,9 @@ public class FormBarang extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         TabelBarang = new javax.swing.JTable();
         ButtonCari = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        InputCari = new javax.swing.JTextField();
         ButtonCetak = new javax.swing.JButton();
+        ButtonRefreshTabel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -127,9 +134,19 @@ public class FormBarang extends javax.swing.JDialog {
         });
 
         ButtonBatal.setText("Batal");
+        ButtonBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonBatalActionPerformed(evt);
+            }
+        });
 
         ButtonHapus.setForeground(new java.awt.Color(255, 255, 255));
         ButtonHapus.setText("Hapus");
+        ButtonHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonHapusActionPerformed(evt);
+            }
+        });
 
         ButtonTutup.setBackground(new java.awt.Color(255, 153, 153));
         ButtonTutup.setForeground(new java.awt.Color(255, 255, 255));
@@ -167,13 +184,20 @@ public class FormBarang extends javax.swing.JDialog {
             }
         });
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        InputCari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                InputCariActionPerformed(evt);
             }
         });
 
         ButtonCetak.setText("Cetak");
+
+        ButtonRefreshTabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/reload.png"))); // NOI18N
+        ButtonRefreshTabel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonRefreshTabelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -199,11 +223,14 @@ public class FormBarang extends javax.swing.JDialog {
                         .addGap(36, 36, 36))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(ButtonRefreshTabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(ButtonCari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(InputCari, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(ButtonCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
@@ -222,10 +249,10 @@ public class FormBarang extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addComponent(ButtonTutup, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(34, 34, 34))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(198, 198, 198)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(162, 162, 162))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,12 +287,14 @@ public class FormBarang extends javax.swing.JDialog {
                     .addComponent(ButtonTutup)
                     .addComponent(ButtonBatal)
                     .addComponent(ButtonHapus))
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonRefreshTabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCetak)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(InputCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ButtonCari))
                 .addGap(15, 15, 15))
         );
@@ -348,33 +377,83 @@ public class FormBarang extends javax.swing.JDialog {
 
     private void ButtonCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCariActionPerformed
         // TODO add your handling code here:
+        String searchInput = InputCari.getText().trim();
+
+        if (searchInput.equals("")) {
+            JOptionPane.showMessageDialog(null, "Masukkan keyword terlebih dahulu!");
+            InputCari.requestFocus();
+            return;
+        }
+
+        try {
+            int row = TabelBarang.getRowCount();
+            for (int i = 0; i < row; i++) {
+                table.removeRow(0);
+            }
+
+            // Koneksi ke database
+            Connection koneksi = DriverManager.getConnection(
+                "jdbc:mysql://localhost/aplikasipembelian", 
+                "root", 
+                "lumiere2327"
+            );
+
+            // Query pencarian
+            String query = "SELECT * FROM tabelbarang WHERE Kode LIKE ? OR NamaBarang LIKE ?";
+            PreparedStatement pst = koneksi.prepareStatement(query);
+            pst.setString(1, "%" + searchInput + "%");
+            pst.setString(2, "%" + searchInput + "%");
+
+            ResultSet rs = pst.executeQuery();
+            
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(rootPane, "Kode atau Nama Barang '" + InputCari.getText().trim() + "' tidak ditemukan!\n" + "Silahkah refesh untuk melihat tabel!");
+                return;
+            }
+
+            // Cek apakah data ditemukan
+            while (rs.next()) {
+                String[] data = {
+                    rs.getString("Kode"),
+                    rs.getString("NamaBarang"),
+                    rs.getString("HargaBeli"),
+                    rs.getString("HargaJual"),
+                    rs.getString("Stok"),
+                };
+                table.addRow(data);
+            }
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(rootPane, "Database Error: " + error.getMessage());
+        }    
     }//GEN-LAST:event_ButtonCariActionPerformed
 
     private void TabelBarangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelBarangMouseClicked
         int selectedRow = TabelBarang.getSelectedRow();
-    DefaultTableModel model = (DefaultTableModel) TabelBarang.getModel();
+        DefaultTableModel model = (DefaultTableModel) TabelBarang.getModel();
 
-    // Ambil nilai dari tabel
-    kodeLama = model.getValueAt(selectedRow, 0).toString(); // kolom 0 = kode
-    String nama = model.getValueAt(selectedRow, 1).toString();
-    String hargaBeli = model.getValueAt(selectedRow, 2).toString();
-    String hargaJual = model.getValueAt(selectedRow, 3).toString();
-    String stok = model.getValueAt(selectedRow, 4).toString();
+        // Ambil nilai dari tabel
+        kodeLama = model.getValueAt(selectedRow, 0).toString(); // kolom 0 = kode
+        String nama = model.getValueAt(selectedRow, 1).toString();
+        String hargaBeli = model.getValueAt(selectedRow, 2).toString();
+        String hargaJual = model.getValueAt(selectedRow, 3).toString();
+        String stok = model.getValueAt(selectedRow, 4).toString();
 
-    // Masukkan ke input field
-    InputKodeBarang.setText(kodeLama);
-    InputNamaBarang.setText(nama);
-    InputHargaBeli.setText(hargaBeli);
-    InputHargaJual.setText(hargaJual);
-    InputStok.setText(stok);
+        // Masukkan ke input field
+        InputKodeBarang.setText(kodeLama);
+        InputNamaBarang.setText(nama);
+        InputHargaBeli.setText(hargaBeli);
+        InputHargaJual.setText(hargaJual);
+        InputStok.setText(stok);
     }//GEN-LAST:event_TabelBarangMouseClicked
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void InputCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputCariActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        ButtonCari.doClick();
+    }//GEN-LAST:event_InputCariActionPerformed
 
     private void ButtonTutupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTutupActionPerformed
         // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_ButtonTutupActionPerformed
 
     private void ButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditActionPerformed
@@ -414,6 +493,83 @@ public class FormBarang extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(rootPane, "Database Error: " + error.getMessage());
             }
     }//GEN-LAST:event_ButtonEditActionPerformed
+
+    private void ButtonBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBatalActionPerformed
+        // TODO add your handling code here:
+        InputKodeBarang.setText(null);
+        InputNamaBarang.setText(null);
+        InputHargaBeli.setText(null);
+        InputHargaJual.setText(null);
+        InputStok.setText(null);
+        InputKodeBarang.requestFocus();
+    }//GEN-LAST:event_ButtonBatalActionPerformed
+
+    private void ButtonHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHapusActionPerformed
+        // TODO add your handling code here:
+        try {
+            Connection koneksi;
+            koneksi = DriverManager.getConnection("jdbc:mysql://localhost/aplikasipembelian","root",
+                "lumiere2327");
+            String kodeBarang  = InputKodeBarang.getText();    
+            int result = koneksi.createStatement().executeUpdate("DELETE FROM tabelbarang WHERE Kode = '"+ kodeBarang +"'");
+            JOptionPane.showMessageDialog(rootPane, "Data berhasil dihapus dengan id: " + kodeBarang);
+            InputKodeBarang.setText(null);
+            InputNamaBarang.setText(null);
+            InputHargaBeli.setText(null);
+            InputHargaJual.setText(null);
+            InputStok.setText(null);
+            InputKodeBarang.requestFocus();
+            tampil();
+        } catch(SQLException error) {
+            JOptionPane.showMessageDialog(rootPane, "Database Error: " + error.getMessage());
+        }
+    }//GEN-LAST:event_ButtonHapusActionPerformed
+
+    private void ButtonRefreshTabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRefreshTabelActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+        // Koneksi ke database
+        Connection koneksi = DriverManager.getConnection(
+            "jdbc:mysql://localhost/aplikasipembelian", "root", "lumiere2327"
+        );
+
+        // Ambil model tabel yang sudah ada
+        DefaultTableModel table = (DefaultTableModel) TabelBarang.getModel();
+
+        // Hapus semua baris lama
+        int row = table.getRowCount();
+        for (int i = 0; i < row; i++) {
+            table.removeRow(0);
+        }
+
+        // Ambil semua data dari tabelbarang
+        String sql = "SELECT * FROM tabelbarang";
+        Statement stmt = koneksi.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+
+        // Tambahkan ke JTable
+        while (rs.next()) {
+            String[] data = {
+                rs.getString("Kode"),
+                rs.getString("NamaBarang"),
+                rs.getString("HargaBeli"),
+                rs.getString("HargaJual"),
+                rs.getString("Stok")
+            };
+            table.addRow(data);
+        }
+
+        // Tutup koneksi
+        koneksi.close();
+
+        // Opsional: tampilkan pesan sukses
+         JOptionPane.showMessageDialog(rootPane, "Tabel berhasil diperbarui!");
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(rootPane, "Gagal memuat data: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_ButtonRefreshTabelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -463,8 +619,10 @@ public class FormBarang extends javax.swing.JDialog {
     private javax.swing.JButton ButtonCetak;
     private javax.swing.JButton ButtonEdit;
     private javax.swing.JButton ButtonHapus;
+    private javax.swing.JButton ButtonRefreshTabel;
     private javax.swing.JButton ButtonSimpan;
     private javax.swing.JButton ButtonTutup;
+    private javax.swing.JTextField InputCari;
     private javax.swing.JTextField InputHargaBeli;
     private javax.swing.JTextField InputHargaJual;
     private javax.swing.JTextField InputKodeBarang;
@@ -479,7 +637,6 @@ public class FormBarang extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
     
