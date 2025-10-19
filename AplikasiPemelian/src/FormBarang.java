@@ -13,11 +13,15 @@ import java.sql.PreparedStatement;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import java.net.URL;
-import javax.swing.ImageIcon;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
+import java.util.HashMap;
+import java.io.File;
 
 /**
  *
@@ -26,6 +30,13 @@ import javax.imageio.ImageIO;
 public class FormBarang extends javax.swing.JDialog {
     private DefaultTableModel table;
     String kodeLama;
+    Koneksi konek = new Koneksi();
+    Connection con = konek.buatKoneksi();
+    JasperReport JasReport;
+    JasperPrint JasPrint;
+    HashMap parameter = new HashMap();
+    JasperDesign JasDesign;
+    
     /**
      * Creates new form FormBarang
      */
@@ -191,6 +202,11 @@ public class FormBarang extends javax.swing.JDialog {
         });
 
         ButtonCetak.setText("Cetak");
+        ButtonCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCetakActionPerformed(evt);
+            }
+        });
 
         ButtonRefreshTabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/reload.png"))); // NOI18N
         ButtonRefreshTabel.addActionListener(new java.awt.event.ActionListener() {
@@ -564,12 +580,26 @@ public class FormBarang extends javax.swing.JDialog {
         koneksi.close();
 
         // Opsional: tampilkan pesan sukses
-         JOptionPane.showMessageDialog(rootPane, "Tabel berhasil diperbarui!");
+        JOptionPane.showMessageDialog(rootPane, "Tabel berhasil diperbarui!");
 
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(rootPane, "Gagal memuat data: " + ex.getMessage());
     }
     }//GEN-LAST:event_ButtonRefreshTabelActionPerformed
+
+    private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
+        // TODO add your handling code here:
+        try {
+            File report = new File("./src/reportBarang.jrxml");
+            JasDesign = JRXmlLoader.load(report);
+            parameter.clear();
+            JasReport = JasperCompileManager.compileReport(JasDesign);
+            JasPrint = JasperFillManager.fillReport(JasReport, parameter, con);
+            JasperViewer.viewReport(JasPrint, true);
+        }catch(Exception error) {
+            JOptionPane.showMessageDialog(null,"Gagal print: " + error);
+        }
+    }//GEN-LAST:event_ButtonCetakActionPerformed
 
     /**
      * @param args the command line arguments
@@ -643,17 +673,20 @@ public class FormBarang extends javax.swing.JDialog {
     private void tampil() {
         try {
             int row=TabelBarang.getRowCount();
+            
             for(int i=0; i<row;i++){
                 table.removeRow(0);
             }
 
             Connection koneksi = DriverManager.getConnection("jdbc:mysql://localhost/aplikasipembelian","root", "lumiere2327");
             ResultSet dat=koneksi.createStatement().executeQuery("select * from tabelbarang");
-                while(dat.next()){
-                    String[]
-                    data={dat.getString(1),dat.getString(2),dat.getString(3),dat.getString(4),dat.getString(5)};
-                    table.addRow(data);
-                }
+            
+            while(dat.next()){
+                String[]
+                data={dat.getString(1),dat.getString(2),dat.getString(3),dat.getString(4),dat.getString(5)};
+                table.addRow(data);
+            }
+            
         } catch (SQLException error) {
             JOptionPane.showMessageDialog(rootPane,"Database Error: " + error.getMessage());
         }
