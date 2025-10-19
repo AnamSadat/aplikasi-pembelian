@@ -658,6 +658,4 @@ public class FormBarang extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane,"Database Error: " + error.getMessage());
         }
     }
-    
-    
 }
