@@ -1,8 +1,13 @@
+package components.barang;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 
+import io.github.cdimascio.dotenv.Dotenv;
+import static io.github.cdimascio.dotenv.DslKt.dotenv;
+import utils.Koneksi;
 import javax.swing.JOptionPane;
 import java.sql.Statement;
 import java.sql.Connection;
@@ -39,7 +44,18 @@ public class FormBarang extends javax.swing.JDialog {
     HashMap parameter = new HashMap();
     JasperDesign JasDesign;
     
-    private static final String mysqlUrl = "jdbc:mysql://localhost/aplikasipembelian?user=root&password=lumiere2327";
+     // muat .env sekali saja (static block biar nggak panggil berkali-kali)
+    private static final Dotenv dotenv = Dotenv.load();
+
+    // bikin variabel URL static final
+    private static final String mysqlUrl = String.format(
+        "%s%s?user=%s&password=%s",
+        dotenv.get("DBURL"),
+        dotenv.get("DBNAME"),
+        dotenv.get("DBUSER"),
+        dotenv.get("DBPASSWORD")
+    );
+
     
     /**
      * @param parent, modal

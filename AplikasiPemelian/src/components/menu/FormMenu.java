@@ -1,3 +1,8 @@
+package components.menu;
+
+import components.suplier.FormSuplier;
+import components.barang.FormBarang;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -5,7 +10,7 @@
 
 /**
  *
- * @author LAB MULTI
+ * @author Anam Sadat
  */
 public class FormMenu extends javax.swing.JFrame {
 
@@ -14,6 +19,7 @@ public class FormMenu extends javax.swing.JFrame {
      */
     public FormMenu() {
         initComponents();
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); 
     }
 
     /**

@@ -1,4 +1,7 @@
+package components.suplier;
 
+
+import utils.Koneksi;
 import java.io.File;
 import javax.swing.JOptionPane;
 import java.sql.Statement;
