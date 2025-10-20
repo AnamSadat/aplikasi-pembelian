@@ -29,7 +29,7 @@ public class FormMenu extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         MenuBarang = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        MenuSuplier = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
 
@@ -47,13 +47,13 @@ public class FormMenu extends javax.swing.JFrame {
         });
         jMenu1.add(MenuBarang);
 
-        jMenuItem3.setText("Data Suplier");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        MenuSuplier.setText("Data Suplier");
+        MenuSuplier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                MenuSuplierActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        jMenu1.add(MenuSuplier);
 
         jMenuBar1.add(jMenu1);
 
@@ -85,9 +85,11 @@ public class FormMenu extends javax.swing.JFrame {
         Barang.setVisible(true);
     }//GEN-LAST:event_MenuBarangActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void MenuSuplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuSuplierActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+        FormSuplier Suplier = new FormSuplier(this, false);
+        Suplier.setVisible(true);
+    }//GEN-LAST:event_MenuSuplierActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,11 +128,11 @@ public class FormMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem MenuBarang;
+    private javax.swing.JMenuItem MenuSuplier;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem3;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,9 +19,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.view.JasperViewer;
 import java.util.HashMap;
 import java.io.File;
+import java.util.Arrays;
+import javax.swing.JFrame;
+import net.sf.jasperreports.swing.JRViewer;
 
 /**
  *
@@ -37,7 +39,10 @@ public class FormBarang extends javax.swing.JDialog {
     HashMap parameter = new HashMap();
     JasperDesign JasDesign;
     
+    private static final String mysqlUrl = "jdbc:mysql://localhost/aplikasipembelian?user=root&password=lumiere2327";
+    
     /**
+     * @param parent, modal
      * Creates new form FormBarang
      */
     public FormBarang(java.awt.Frame parent, boolean modal) {
@@ -85,7 +90,7 @@ public class FormBarang extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel1.setText("INPUT BARANG");
 
         jLabel2.setText("Kode Barang:");
@@ -358,8 +363,7 @@ public class FormBarang extends javax.swing.JDialog {
         } else
             try {
                 Connection koneksi;
-                koneksi = DriverManager.getConnection("jdbc:mysql://localhost/aplikasipembelian","root",
-                    "lumiere2327");
+                koneksi = DriverManager.getConnection(mysqlUrl);
                 
                 String kodeBarang  = InputKodeBarang.getText();
                 String cekQuery = "SELECT COUNT(*) FROM tabelbarang WHERE Kode = ?";
@@ -372,22 +376,25 @@ public class FormBarang extends javax.swing.JDialog {
                 
                 if (jumlah > 0) {
                     JOptionPane.showMessageDialog(rootPane, 
-                    "Kode Barang '" + kodeBarang + "' sudah ada!\nSilakan gunakan kode lain.",
+                    "Kode Barang '" + kodeBarang + "' Sudah ada!\nSilakan gunakan kode lain.",
                     "Duplikasi Data",
                      JOptionPane.WARNING_MESSAGE);
+                    System.out.println("Kode Barang '" + kodeBarang + "' Sudah ada atau duplikasi ata");
                     return;
                 }
                 
-                koneksi.createStatement().executeUpdate("insert into tabelbarang values('"+InputKodeBarang.getText()+"','"+InputNamaBarang.getText()+"','"+InputHargaBeli.getText()+"','"+InputHargaJual.getText()+"','"+InputStok.getText()+"')");JOptionPane.showMessageDialog(rootPane, "Data berhasil disimpan");
-                    InputKodeBarang.setText(null);
-                    InputNamaBarang.setText(null);
-                    InputHargaBeli.setText(null);
-                    InputHargaJual.setText(null);
-                    InputStok.setText(null);
-                    InputKodeBarang.requestFocus();
-                    tampil(); //memanggil prosedur dengan nama tampil, prosedur harus dibuat terlebih dahulu
+                koneksi.createStatement().executeUpdate("INSERT INTO tabelbarang VALUES('"+InputKodeBarang.getText()+"','"+InputNamaBarang.getText()+"','"+InputHargaBeli.getText()+"','"+InputHargaJual.getText()+"','"+InputStok.getText()+"')");
+                JOptionPane.showMessageDialog(rootPane, "Data berhasil disimpan");
+                InputKodeBarang.setText(null);
+                InputNamaBarang.setText(null);
+                InputHargaBeli.setText(null);
+                InputHargaJual.setText(null);
+                InputStok.setText(null);
+//                InputKodeBarang.requestFocus();
+                tampil(); //memanggil prosedur dengan nama tampil, prosedur harus dibuat terlebih dahulu
             } catch (SQLException error) {
-                    JOptionPane.showMessageDialog(rootPane, "Database Error: " + error.getMessage());
+                JOptionPane.showMessageDialog(rootPane, "Database Error: " + error.getMessage());
+                System.out.println("Database Error: " + error.getMessage());
             }
     }//GEN-LAST:event_ButtonSimpanActionPerformed
 
@@ -408,11 +415,7 @@ public class FormBarang extends javax.swing.JDialog {
             }
 
             // Koneksi ke database
-            Connection koneksi = DriverManager.getConnection(
-                "jdbc:mysql://localhost/aplikasipembelian", 
-                "root", 
-                "lumiere2327"
-            );
+            Connection koneksi = DriverManager.getConnection(mysqlUrl);
 
             // Query pencarian
             String query = "SELECT * FROM tabelbarang WHERE Kode LIKE ? OR NamaBarang LIKE ?";
@@ -421,14 +424,11 @@ public class FormBarang extends javax.swing.JDialog {
             pst.setString(2, "%" + searchInput + "%");
 
             ResultSet rs = pst.executeQuery();
-            
-            if (!rs.next()) {
-                JOptionPane.showMessageDialog(rootPane, "Kode atau Nama Barang '" + InputCari.getText().trim() + "' tidak ditemukan!\n" + "Silahkah refesh untuk melihat tabel!");
-                return;
-            }
-
+           
             // Cek apakah data ditemukan
+            boolean found = false;
             while (rs.next()) {
+                found = true;
                 String[] data = {
                     rs.getString("Kode"),
                     rs.getString("NamaBarang"),
@@ -437,9 +437,17 @@ public class FormBarang extends javax.swing.JDialog {
                     rs.getString("Stok"),
                 };
                 table.addRow(data);
+                System.out.println("hasil cari: " + Arrays.toString(data));
+            }
+            
+            if (!found) {
+                JOptionPane.showMessageDialog(rootPane, 
+                    "Kode atau Nama Barang '" + searchInput + "' tidak ditemukan!\nSilahkan refresh untuk melihat tabel!");
+                System.out.println("Kode atau Nama Barang '" + searchInput + "' tidak ditemukan!\nSilahkan refresh untuk melihat tabel!");
             }
         } catch (SQLException error) {
             JOptionPane.showMessageDialog(rootPane, "Database Error: " + error.getMessage());
+            System.out.println("Database Error: " + error.getMessage());
         }    
     }//GEN-LAST:event_ButtonCariActionPerformed
 
@@ -492,21 +500,21 @@ public class FormBarang extends javax.swing.JDialog {
         } else
             try {
                 Connection koneksi;
-                koneksi = DriverManager.getConnection("jdbc:mysql://localhost/aplikasipembelian","root",
-                    "lumiere2327");
+                koneksi = DriverManager.getConnection(mysqlUrl);
                 String kodeBarang  = InputKodeBarang.getText();
                 
-                int result = koneksi.createStatement().executeUpdate("update tabelbarang set Kode = '"+ kodeBarang +"', NamaBarang = '"+InputNamaBarang.getText()+"', HargaBeli = '"+InputHargaBeli.getText()+"',  HargaJual = ' "+InputHargaJual.getText()+"',  Stok = '"+InputStok.getText()+"' where Kode = '"+kodeLama+"'");
+                int result = koneksi.createStatement().executeUpdate("UPDATE tabelbarang SET Kode = '"+ kodeBarang +"', NamaBarang = '"+InputNamaBarang.getText()+"', HargaBeli = '"+InputHargaBeli.getText()+"',  HargaJual = ' "+InputHargaJual.getText()+"',  Stok = '"+InputStok.getText()+"' WHERE Kode = '"+kodeLama+"'");
                 JOptionPane.showMessageDialog(rootPane, "Data berhasil disimpan");
                 InputKodeBarang.setText(null);
                 InputNamaBarang.setText(null);
                 InputHargaBeli.setText(null);
                 InputHargaJual.setText(null);
                 InputStok.setText(null);
-                InputKodeBarang.requestFocus();
+//                InputKodeBarang.requestFocus();
                 tampil(); //memanggil prosedur dengan nama tampil, prosedur harus dibuat terlebih dahulu
             } catch (SQLException error) {
                 JOptionPane.showMessageDialog(rootPane, "Database Error: " + error.getMessage());
+                System.out.println("Database Error: " + error.getMessage());
             }
     }//GEN-LAST:event_ButtonEditActionPerformed
 
@@ -524,8 +532,7 @@ public class FormBarang extends javax.swing.JDialog {
         // TODO add your handling code here:
         try {
             Connection koneksi;
-            koneksi = DriverManager.getConnection("jdbc:mysql://localhost/aplikasipembelian","root",
-                "lumiere2327");
+            koneksi = DriverManager.getConnection(mysqlUrl);
             String kodeBarang  = InputKodeBarang.getText();    
             int result = koneksi.createStatement().executeUpdate("DELETE FROM tabelbarang WHERE Kode = '"+ kodeBarang +"'");
             JOptionPane.showMessageDialog(rootPane, "Data berhasil dihapus dengan id: " + kodeBarang);
@@ -534,10 +541,10 @@ public class FormBarang extends javax.swing.JDialog {
             InputHargaBeli.setText(null);
             InputHargaJual.setText(null);
             InputStok.setText(null);
-            InputKodeBarang.requestFocus();
             tampil();
         } catch(SQLException error) {
             JOptionPane.showMessageDialog(rootPane, "Database Error: " + error.getMessage());
+            System.out.println("Database Error: " + error.getMessage());
         }
     }//GEN-LAST:event_ButtonHapusActionPerformed
 
@@ -545,46 +552,45 @@ public class FormBarang extends javax.swing.JDialog {
         // TODO add your handling code here:
         
         try {
-        // Koneksi ke database
-        Connection koneksi = DriverManager.getConnection(
-            "jdbc:mysql://localhost/aplikasipembelian", "root", "lumiere2327"
-        );
+            // Koneksi ke database
+            Connection koneksi = DriverManager.getConnection(mysqlUrl);
 
-        // Ambil model tabel yang sudah ada
-        DefaultTableModel table = (DefaultTableModel) TabelBarang.getModel();
+            // Ambil model tabel yang sudah ada
+            DefaultTableModel table = (DefaultTableModel) TabelBarang.getModel();
 
-        // Hapus semua baris lama
-        int row = table.getRowCount();
-        for (int i = 0; i < row; i++) {
-            table.removeRow(0);
+            // Hapus semua baris lama
+            int row = table.getRowCount();
+            for (int i = 0; i < row; i++) {
+                table.removeRow(0);
+            }
+
+            // Ambil semua data dari tabelbarang
+            String sql = "SELECT * FROM tabelbarang";
+            Statement stmt = koneksi.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            // Tambahkan ke JTable
+            while (rs.next()) {
+                String[] data = {
+                    rs.getString("Kode"),
+                    rs.getString("NamaBarang"),
+                    rs.getString("HargaBeli"),
+                    rs.getString("HargaJual"),
+                    rs.getString("Stok")
+                };
+                table.addRow(data);
+            }
+            
+            // Tutup koneksi
+            koneksi.close();
+            
+            // Opsional: tampilkan pesan sukses
+            JOptionPane.showMessageDialog(rootPane, "Tabel berhasil diperbarui!");
+
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(rootPane, "Gagal memuat data: " + error.getMessage());
+            System.out.println("Gagal memuat data: " + error.getMessage());
         }
-
-        // Ambil semua data dari tabelbarang
-        String sql = "SELECT * FROM tabelbarang";
-        Statement stmt = koneksi.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-
-        // Tambahkan ke JTable
-        while (rs.next()) {
-            String[] data = {
-                rs.getString("Kode"),
-                rs.getString("NamaBarang"),
-                rs.getString("HargaBeli"),
-                rs.getString("HargaJual"),
-                rs.getString("Stok")
-            };
-            table.addRow(data);
-        }
-
-        // Tutup koneksi
-        koneksi.close();
-
-        // Opsional: tampilkan pesan sukses
-        JOptionPane.showMessageDialog(rootPane, "Tabel berhasil diperbarui!");
-
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(rootPane, "Gagal memuat data: " + ex.getMessage());
-    }
     }//GEN-LAST:event_ButtonRefreshTabelActionPerformed
 
     private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
@@ -595,9 +601,22 @@ public class FormBarang extends javax.swing.JDialog {
             parameter.clear();
             JasReport = JasperCompileManager.compileReport(JasDesign);
             JasPrint = JasperFillManager.fillReport(JasReport, parameter, con);
-            JasperViewer.viewReport(JasPrint, true);
+              // Buat instance JasperViewer
+            JRViewer viewer = new JRViewer(JasPrint);
+
+            // Buat JFrame baru sebagai container
+            JFrame previewFrame = new JFrame("Preview Laporan");
+            previewFrame.getContentPane().add(viewer);
+            previewFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); // full screen
+            previewFrame.setAlwaysOnTop(true); // pastikan di atas
+            previewFrame.setLocationRelativeTo(null); // tengah layar
+            previewFrame.setVisible(true);
+            previewFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+
         }catch(Exception error) {
-            JOptionPane.showMessageDialog(null,"Gagal print: " + error);
+            JOptionPane.showMessageDialog(null,"Gagal print: " + error.getMessage());
+            System.out.println("Gagal print: " + error.getMessage());
         }
     }//GEN-LAST:event_ButtonCetakActionPerformed
 
@@ -672,23 +691,18 @@ public class FormBarang extends javax.swing.JDialog {
     
     private void tampil() {
         try {
-            int row=TabelBarang.getRowCount();
-            
-            for(int i=0; i<row;i++){
-                table.removeRow(0);
-            }
-
-            Connection koneksi = DriverManager.getConnection("jdbc:mysql://localhost/aplikasipembelian","root", "lumiere2327");
-            ResultSet dat=koneksi.createStatement().executeQuery("select * from tabelbarang");
-            
+            table.setRowCount(0); // hapus semua row
+            Connection koneksi = DriverManager.getConnection(mysqlUrl);
+            ResultSet dat = koneksi.createStatement().executeQuery("SELECT * FROM tabelbarang");
             while(dat.next()){
-                String[]
-                data={dat.getString(1),dat.getString(2),dat.getString(3),dat.getString(4),dat.getString(5)};
+                String[] data = {dat.getString(1),dat.getString(2),dat.getString(3),dat.getString(4),dat.getString(5)};
                 table.addRow(data);
             }
-            
+            koneksi.close();
         } catch (SQLException error) {
             JOptionPane.showMessageDialog(rootPane,"Database Error: " + error.getMessage());
+            System.out.println("Database Error: " + error.getMessage());
         }
     }
+
 }
