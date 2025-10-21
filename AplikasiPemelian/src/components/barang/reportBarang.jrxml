@@ -77,7 +77,7 @@
 		<band height="70" splitType="Stretch">
 			<image>
 				<reportElement x="-20" y="0" width="595" height="64" uuid="b8c618f1-6f52-41fa-a57a-9ea31a53a379"/>
-				<imageExpression><![CDATA["src/wood.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["src/images/wood.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="Title" x="0" y="5" width="263" height="33" uuid="348daabb-9ce3-4778-8baa-6988a59080d1"/>

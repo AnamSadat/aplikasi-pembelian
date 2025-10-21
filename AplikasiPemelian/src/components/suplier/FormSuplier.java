@@ -1,6 +1,7 @@
 package components.suplier;
 
 
+import io.github.cdimascio.dotenv.Dotenv;
 import utils.Koneksi;
 import java.io.File;
 import javax.swing.JOptionPane;
@@ -43,9 +44,18 @@ public class FormSuplier extends javax.swing.JDialog {
     HashMap parameter = new HashMap();
     JasperDesign JasDesign;
     
-    // MySQL environment
-    private static final String mysqlUrl = "jdbc:mysql://localhost/aplikasipembelian?user=root&password=lumiere2327";
-            
+     // muat .env sekali saja (static block biar nggak panggil berkali-kali)
+    private static final Dotenv dotenv = Dotenv.load();
+
+    // bikin variabel URL static final
+    private static final String mysqlUrl = String.format(
+        "%s%s?user=%s&password=%s",
+        dotenv.get("DBURL"),
+        dotenv.get("DBNAME"),
+        dotenv.get("DBUSER"),
+        dotenv.get("DBPASSWORD")
+    );
+    
     /**
      * Creates new form FormSuplier
      */
@@ -515,7 +525,7 @@ public class FormSuplier extends javax.swing.JDialog {
     private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
         // TODO add your handling code here:
         try {
-            File report = new File("./src/reportSuplier.jrxml");
+            File report = new File("./src/components/suplier/reportSuplier.jrxml");
             JasperDesign JasDesign = JRXmlLoader.load(report);
             parameter.clear();
             JasReport = JasperCompileManager.compileReport(JasDesign);

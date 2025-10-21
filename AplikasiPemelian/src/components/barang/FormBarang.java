@@ -56,7 +56,6 @@ public class FormBarang extends javax.swing.JDialog {
         dotenv.get("DBPASSWORD")
     );
 
-    
     /**
      * @param parent, modal
      * Creates new form FormBarang
@@ -612,7 +611,7 @@ public class FormBarang extends javax.swing.JDialog {
     private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
         // TODO add your handling code here:
         try {
-            File report = new File("./src/reportBarang.jrxml");
+            File report = new File("./src/components/barang/reportBarang.jrxml");
             JasDesign = JRXmlLoader.load(report);
             parameter.clear();
             JasReport = JasperCompileManager.compileReport(JasDesign);
