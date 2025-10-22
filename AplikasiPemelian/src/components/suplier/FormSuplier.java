@@ -128,8 +128,8 @@ public class FormSuplier extends javax.swing.JDialog {
             }
         });
 
-        ButtonSimpan.setBackground(java.awt.SystemColor.activeCaption);
-        ButtonSimpan.setForeground(new java.awt.Color(255, 255, 255));
+        ButtonSimpan.setBackground(new java.awt.Color(51, 255, 51));
+        ButtonSimpan.setForeground(new java.awt.Color(0, 0, 0));
         ButtonSimpan.setText("Simpan");
         ButtonSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,6 +137,8 @@ public class FormSuplier extends javax.swing.JDialog {
             }
         });
 
+        ButtonEdit.setBackground(new java.awt.Color(51, 51, 255));
+        ButtonEdit.setForeground(new java.awt.Color(0, 0, 0));
         ButtonEdit.setText("Edit");
         ButtonEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,7 +153,8 @@ public class FormSuplier extends javax.swing.JDialog {
             }
         });
 
-        ButtonHapus.setForeground(new java.awt.Color(255, 255, 255));
+        ButtonHapus.setBackground(new java.awt.Color(255, 51, 51));
+        ButtonHapus.setForeground(new java.awt.Color(0, 0, 0));
         ButtonHapus.setText("Hapus");
         ButtonHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,7 +162,7 @@ public class FormSuplier extends javax.swing.JDialog {
             }
         });
 
-        ButtonTutup.setBackground(new java.awt.Color(255, 153, 153));
+        ButtonTutup.setBackground(new java.awt.Color(51, 51, 51));
         ButtonTutup.setForeground(new java.awt.Color(255, 255, 255));
         ButtonTutup.setText("Tutup");
         ButtonTutup.addActionListener(new java.awt.event.ActionListener() {

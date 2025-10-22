@@ -20,6 +20,8 @@ public class FormMenu extends javax.swing.JFrame {
     public FormMenu() {
         initComponents();
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); 
+        jMenuBar1.add(javax.swing.Box.createHorizontalGlue());
+        jMenuBar1.add(MenuLogout);
     }
 
     /**
@@ -38,6 +40,8 @@ public class FormMenu extends javax.swing.JFrame {
         MenuSuplier = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        MenuLogout = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -69,6 +73,24 @@ public class FormMenu extends javax.swing.JFrame {
         jMenu3.setText("Laporan");
         jMenuBar1.add(jMenu3);
 
+        MenuLogout.setText("Account");
+        MenuLogout.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        MenuLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuLogoutActionPerformed(evt);
+            }
+        });
+
+        jMenuItem2.setText("Logout");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        MenuLogout.add(jMenuItem2);
+
+        jMenuBar1.add(MenuLogout);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -79,7 +101,7 @@ public class FormMenu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGap(0, 278, Short.MAX_VALUE)
         );
 
         pack();
@@ -96,6 +118,16 @@ public class FormMenu extends javax.swing.JFrame {
         FormSuplier Suplier = new FormSuplier(this, false);
         Suplier.setVisible(true);
     }//GEN-LAST:event_MenuSuplierActionPerformed
+
+    private void MenuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuLogoutActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_MenuLogoutActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -134,11 +166,13 @@ public class FormMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem MenuBarang;
+    private javax.swing.JMenu MenuLogout;
     private javax.swing.JMenuItem MenuSuplier;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     // End of variables declaration//GEN-END:variables
 }

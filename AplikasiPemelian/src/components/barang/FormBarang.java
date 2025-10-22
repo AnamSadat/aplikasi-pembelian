@@ -27,7 +27,12 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import java.util.HashMap;
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import net.sf.jasperreports.swing.JRViewer;
 
 /**
@@ -68,6 +73,10 @@ public class FormBarang extends javax.swing.JDialog {
         table = new DefaultTableModel(data,0);
         TabelBarang.setModel(table);
         tampil();
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(TabelBarang.getModel());
+        TabelBarang.setRowSorter(sorter);
+        sorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+        sorter.sort();
     }
 
     /**
@@ -148,8 +157,8 @@ public class FormBarang extends javax.swing.JDialog {
             }
         });
 
-        ButtonSimpan.setBackground(java.awt.SystemColor.activeCaption);
-        ButtonSimpan.setForeground(new java.awt.Color(255, 255, 255));
+        ButtonSimpan.setBackground(new java.awt.Color(51, 255, 51));
+        ButtonSimpan.setForeground(new java.awt.Color(0, 0, 0));
         ButtonSimpan.setText("Simpan");
         ButtonSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,6 +166,8 @@ public class FormBarang extends javax.swing.JDialog {
             }
         });
 
+        ButtonEdit.setBackground(new java.awt.Color(51, 51, 255));
+        ButtonEdit.setForeground(new java.awt.Color(0, 0, 0));
         ButtonEdit.setText("Edit");
         ButtonEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,7 +182,8 @@ public class FormBarang extends javax.swing.JDialog {
             }
         });
 
-        ButtonHapus.setForeground(new java.awt.Color(255, 255, 255));
+        ButtonHapus.setBackground(new java.awt.Color(255, 51, 51));
+        ButtonHapus.setForeground(new java.awt.Color(0, 0, 0));
         ButtonHapus.setText("Hapus");
         ButtonHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,7 +191,7 @@ public class FormBarang extends javax.swing.JDialog {
             }
         });
 
-        ButtonTutup.setBackground(new java.awt.Color(255, 153, 153));
+        ButtonTutup.setBackground(new java.awt.Color(102, 102, 102));
         ButtonTutup.setForeground(new java.awt.Color(255, 255, 255));
         ButtonTutup.setText("Tutup");
         ButtonTutup.addActionListener(new java.awt.event.ActionListener() {
@@ -540,7 +552,9 @@ public class FormBarang extends javax.swing.JDialog {
         InputHargaBeli.setText(null);
         InputHargaJual.setText(null);
         InputStok.setText(null);
+        InputCari.setText(null);
         InputKodeBarang.requestFocus();
+        tampil();
     }//GEN-LAST:event_ButtonBatalActionPerformed
 
     private void ButtonHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHapusActionPerformed
