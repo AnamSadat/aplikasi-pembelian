@@ -13,8 +13,13 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -67,7 +72,10 @@ public class FormSuplier extends javax.swing.JDialog {
         table = new DefaultTableModel(data,0);
         TabelSuplier.setModel(table);
         tampil();
-
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(TabelSuplier.getModel());
+        TabelSuplier.setRowSorter(sorter);
+        sorter.setSortKeys(List.of(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+        sorter.sort();
     }
 
     /**

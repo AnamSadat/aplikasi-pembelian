@@ -6,7 +6,6 @@ package components.barang;
  */
 
 import io.github.cdimascio.dotenv.Dotenv;
-import static io.github.cdimascio.dotenv.DslKt.dotenv;
 import utils.Koneksi;
 import javax.swing.JOptionPane;
 import java.sql.Statement;
@@ -62,7 +61,8 @@ public class FormBarang extends javax.swing.JDialog {
     );
 
     /**
-     * @param parent, modal
+     * @param parent
+     * @param modal
      * Creates new form FormBarang
      */
     public FormBarang(java.awt.Frame parent, boolean modal) {
