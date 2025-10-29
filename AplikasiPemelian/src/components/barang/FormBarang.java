@@ -240,7 +240,7 @@ public class FormBarang extends javax.swing.JDialog {
             }
         });
 
-        ButtonRefreshTabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/reload.png"))); // NOI18N
+        ButtonRefreshTabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/reload.png"))); // NOI18N
         ButtonRefreshTabel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonRefreshTabelActionPerformed(evt);

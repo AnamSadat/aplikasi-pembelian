@@ -216,7 +216,7 @@ public class FormSuplier extends javax.swing.JDialog {
         InputAlamat.setRows(5);
         jScrollPane2.setViewportView(InputAlamat);
 
-        ButtonRefreshTabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/reload.png"))); // NOI18N
+        ButtonRefreshTabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/reload.png"))); // NOI18N
         ButtonRefreshTabel1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonRefreshTabel1ActionPerformed(evt);

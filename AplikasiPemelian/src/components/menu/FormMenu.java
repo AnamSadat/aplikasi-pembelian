@@ -2,6 +2,7 @@ package components.menu;
 
 import components.suplier.FormSuplier;
 import components.barang.FormBarang;
+import components.transaksi.FormTransaksi;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -39,6 +40,7 @@ public class FormMenu extends javax.swing.JFrame {
         MenuBarang = new javax.swing.JMenuItem();
         MenuSuplier = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        MenuTransaksi = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         MenuLogout = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -68,6 +70,15 @@ public class FormMenu extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Transaksi");
+
+        MenuTransaksi.setText("Data Transaksi");
+        MenuTransaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuTransaksiActionPerformed(evt);
+            }
+        });
+        jMenu2.add(MenuTransaksi);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Laporan");
@@ -84,7 +95,7 @@ public class FormMenu extends javax.swing.JFrame {
         jMenuItem2.setText("Logout");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                MenuLogoutActionPerformed(evt);
             }
         });
         MenuLogout.add(jMenuItem2);
@@ -124,10 +135,11 @@ public class FormMenu extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_MenuLogoutActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void MenuTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuTransaksiActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+        FormTransaksi Transaksi = new FormTransaksi(this, false);
+        Transaksi.setVisible(true);
+    }//GEN-LAST:event_MenuTransaksiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,6 +180,7 @@ public class FormMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem MenuBarang;
     private javax.swing.JMenu MenuLogout;
     private javax.swing.JMenuItem MenuSuplier;
+    private javax.swing.JMenuItem MenuTransaksi;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
