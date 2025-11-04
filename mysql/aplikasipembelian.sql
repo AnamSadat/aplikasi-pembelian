@@ -23,12 +23,46 @@ DROP TABLE IF EXISTS `tabelbarang`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tabelbarang` (
-  `Kode` varchar(60) NOT NULL,
+  `Kode` varchar(100) NOT NULL,
   `NamaBarang` varchar(50) DEFAULT NULL,
   `HargaBeli` int DEFAULT NULL,
   `HargaJual` int DEFAULT NULL,
-  `Stok` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `Stok` int DEFAULT NULL,
+  PRIMARY KEY (`Kode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tabelpembelian`
+--
+
+DROP TABLE IF EXISTS `tabelpembelian`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tabelpembelian` (
+  `NoTransaksi` varchar(100) NOT NULL,
+  `Tgl` date DEFAULT NULL,
+  `KodeSupp` varchar(100) NOT NULL,
+  KEY `fk_tabelpembelian_tabelsuplier` (`KodeSupp`),
+  CONSTRAINT `fk_tabelpembelian_tabelsuplier` FOREIGN KEY (`KodeSupp`) REFERENCES `tabelsuplier` (`KodeSuplier`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tabelpembeliandetail`
+--
+
+DROP TABLE IF EXISTS `tabelpembeliandetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tabelpembeliandetail` (
+  `NoTransaksi` varchar(100) NOT NULL,
+  `KodeBarang` varchar(100) NOT NULL,
+  `Jumlah` int DEFAULT NULL,
+  `TotalHarga` int DEFAULT NULL,
+  KEY `fk_tabelpembeliandetail_tabelbarang` (`KodeBarang`),
+  CONSTRAINT `fk_tabelpembeliandetail_tabelbarang` FOREIGN KEY (`KodeBarang`) REFERENCES `tabelbarang` (`Kode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +78,8 @@ CREATE TABLE `tabelsuplier` (
   `Kontak` varchar(60) DEFAULT NULL,
   `Telpon` int DEFAULT NULL,
   `Fax` varchar(60) DEFAULT NULL,
-  `Alamat` varchar(120) DEFAULT NULL
+  `Alamat` varchar(120) DEFAULT NULL,
+  PRIMARY KEY (`KodeSuplier`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +92,4 @@ CREATE TABLE `tabelsuplier` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-22 17:19:37
+-- Dump completed on 2025-11-04 23:04:05
