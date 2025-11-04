@@ -594,7 +594,7 @@ public class FormSuplier extends javax.swing.JDialog {
             }
             
             // Tutup koneksi
-            koneksi.close();
+//            koneksi.close();
             
             // Opsional: tampilkan pesan sukses
             JOptionPane.showMessageDialog(rootPane, "Tabel berhasil diperbarui!");

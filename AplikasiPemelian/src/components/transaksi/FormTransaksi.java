@@ -4,12 +4,24 @@
  */
 package components.transaksi;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.swing.JRViewer;
 import utils.Koneksi;
 /**
  *
@@ -25,6 +37,10 @@ public class FormTransaksi extends javax.swing.JDialog {
     int hargaBeli;
     int jumlahBeli;
     int totalHarga;
+    JasperReport JasReport;
+    JasperPrint JasPrint;
+    HashMap parameter = new HashMap();
+    JasperDesign JasDesign;
 
     /**
      * Creates new form FormTransaksi
@@ -86,7 +102,6 @@ public class FormTransaksi extends javax.swing.JDialog {
         ButtonCetak = new javax.swing.JButton();
         ButtonTutup = new javax.swing.JButton();
         ButtonRefreshTabel = new javax.swing.JButton();
-        ButtonRefreshTabel1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -298,6 +313,11 @@ public class FormTransaksi extends javax.swing.JDialog {
         });
 
         ButtonCetak.setText("Cetak");
+        ButtonCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCetakActionPerformed(evt);
+            }
+        });
 
         ButtonTutup.setText("Tutup");
         ButtonTutup.addActionListener(new java.awt.event.ActionListener() {
@@ -312,8 +332,6 @@ public class FormTransaksi extends javax.swing.JDialog {
                 ButtonRefreshTabelActionPerformed(evt);
             }
         });
-
-        ButtonRefreshTabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/reload.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -353,11 +371,6 @@ public class FormTransaksi extends javax.swing.JDialog {
                                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jScrollPane1))))))
                 .addContainerGap(54, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(ButtonRefreshTabel1)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -382,20 +395,15 @@ public class FormTransaksi extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addComponent(ButtonRefreshTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonRefreshTabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonSimpan)
                     .addComponent(ButtonCetak)
                     .addComponent(ButtonTutup))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(ButtonRefreshTabel1)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -426,7 +434,7 @@ public class FormTransaksi extends javax.swing.JDialog {
         }
         
         try {
-            query = "insert into tabelpembeliandetail values('"+InputNomorTransaksi.getText()+"','"+InputKodeBarang.getText()+"','"+InputJumlah.getText()+"','"+InputTotalHarga.getText()+"')";
+            query = "INSERT INTO tabelpembeliandetail VALUES('"+InputNomorTransaksi.getText()+"','"+InputKodeBarang.getText()+"','"+InputJumlah.getText()+"','"+InputTotalHarga.getText()+"')";
             connect.createStatement().executeUpdate(query);
             //JOptionPane.showMessageDialog(rootPane, "Data berhasil disimpan");
             bersih();
@@ -478,10 +486,14 @@ public class FormTransaksi extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane, "Tanggal tidak valid!\nGunakan format yyyy-MM-dd", "Tanggal Tidak Valid", JOptionPane.WARNING_MESSAGE);
             return;
         }
-//        Date tgl = (Date) value;
         
+        Date date = (Date) value;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = sdf.format(date);
+
+        System.out.println("Hasil Date: " + formattedDate);
         try {
-            query = "INSERT INTO tabelpembelian values('"+InputNomorTransaksi.getText()+"','"+InputTanggalTransaksi.getText()+"','"+InputKodeSupplier.getText()+"')";
+            query = "INSERT INTO tabelpembelian values('"+InputNomorTransaksi.getText()+"','"+formattedDate+"','"+InputKodeSupplier.getText()+"')";
             connect.createStatement().executeUpdate(query);
             JOptionPane.showMessageDialog(rootPane, "Data berhasil disimpan");
             bersih();
@@ -560,7 +572,7 @@ public class FormTransaksi extends javax.swing.JDialog {
             }
 
             // Ambil semua data dari tabelbarang
-            query = "SELECT tabelbarang.Kode, tabelbarang.NamaBarang, tabelbarang.HargaBeli, tabelpembeliandetail.Jumlah, tabelpembeliandetail.TotalHarga FROM tabelbarang JOIN tabelpembeliandetail ON tabelbarang.Kode = tabelpembeliandetail.KodeBarang WHERE tabelpembeliandetail.NoTransaksi = '"+InputNomorTransaksi.getText()+"'";
+            query = "SELECT tabelbarang.Kode, tabelbarang.NamaBarang, tabelbarang.HargaBeli, tabelpembeliandetail.Jumlah, tabelpembeliandetail.TotalHarga FROM tabelbarang JOIN tabelpembeliandetail ON tabelbarang.Kode = tabelpembeliandetail.KodeBarang";
             Statement stmt = connect.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             
@@ -576,9 +588,6 @@ public class FormTransaksi extends javax.swing.JDialog {
                 table.addRow(data);
             }
             
-            // Tutup koneksi
-            connect.close();
-            
             // Opsional: tampilkan pesan sukses
             JOptionPane.showMessageDialog(rootPane, "Tabel berhasil diperbarui!");
 
@@ -587,6 +596,32 @@ public class FormTransaksi extends javax.swing.JDialog {
             System.out.println("Gagal memuat data: " + error.getMessage());
         }
     }//GEN-LAST:event_ButtonRefreshTabelActionPerformed
+
+    private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
+        // TODO add your handling code here:
+        try {
+            File report = new File("./src/components/transaksi/reportTransaksi.jrxml");
+            JasperDesign JasDesign = JRXmlLoader.load(report);
+            parameter.clear();
+            JasReport = JasperCompileManager.compileReport(JasDesign);
+            JasPrint = JasperFillManager.fillReport(JasReport, parameter, connect);
+            // Buat instance JasperViewer
+            JRViewer viewer = new JRViewer(JasPrint);
+
+            // Buat JFrame baru sebagai container
+            JFrame previewFrame = new JFrame("Preview Laporan");
+            previewFrame.getContentPane().add(viewer);
+            previewFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); // full screen
+            previewFrame.setAlwaysOnTop(true); // pastikan di atas
+            previewFrame.setLocationRelativeTo(null); // tengah layar
+            previewFrame.setVisible(true);
+            previewFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        }catch(Exception error) {
+            JOptionPane.showMessageDialog(null,"Gagal print: " + error.getMessage());
+            System.out.println("Gagal print: " + error.getMessage());
+        }
+    }//GEN-LAST:event_ButtonCetakActionPerformed
     
     private void bersih(){
         InputKodeBarang.setText(null);
@@ -604,7 +639,7 @@ public class FormTransaksi extends javax.swing.JDialog {
                 table.removeRow(0);
             }
             
-            query = "SELECT tabelbarang.Kode, tabelbarang.NamaBarang, tabelbarang.HargaBeli, tabelpembeliandetail.Jumlah, tabelpembeliandetail.TotalHarga FROM tabelbarang JOIN tabelpembeliandetail ON tabelbarang.Kode = tabelpembeliandetail.KodeBarang WHERE tabelpembeliandetail.NoTransaksi = '"+InputNomorTransaksi.getText()+"'";
+            query = "SELECT tabelbarang.Kode, tabelbarang.NamaBarang, tabelbarang.HargaBeli, tabelpembeliandetail.Jumlah, tabelpembeliandetail.TotalHarga FROM tabelbarang JOIN tabelpembeliandetail ON tabelbarang.Kode = tabelpembeliandetail.KodeBarang";
             ResultSet dat= connect.createStatement().executeQuery(query);
             while(dat.next()){
                 String[] data={dat.getString(1),dat.getString(2),dat.getString(3),dat.getString(4),dat.getString(5)};
@@ -659,7 +694,6 @@ public class FormTransaksi extends javax.swing.JDialog {
     private javax.swing.JButton ButtonCariSuplier;
     private javax.swing.JButton ButtonCetak;
     private javax.swing.JButton ButtonRefreshTabel;
-    private javax.swing.JButton ButtonRefreshTabel1;
     private javax.swing.JButton ButtonSimpan;
     private javax.swing.JButton ButtonTambah;
     private javax.swing.JButton ButtonTutup;
