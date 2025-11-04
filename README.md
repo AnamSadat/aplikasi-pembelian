@@ -44,6 +44,8 @@ Pastikan sudah terinstall:
 - **MySQL Server**  
 - **Git** *(opsional)*  
 
+> [!NOTE]
+> >
 > Jika kamu menggunakan versi Java dibawahnya maka anda harus mengganti versi java di projectnya
 
 #### 🔧 Cara Ganti Versi Java (di nbproject/project.properties)
