@@ -639,7 +639,8 @@ public class FormTransaksi extends javax.swing.JDialog {
                 table.removeRow(0);
             }
             
-            query = "SELECT tabelbarang.Kode, tabelbarang.NamaBarang, tabelbarang.HargaBeli, tabelpembeliandetail.Jumlah, tabelpembeliandetail.TotalHarga FROM tabelbarang JOIN tabelpembeliandetail ON tabelbarang.Kode = tabelpembeliandetail.KodeBarang";
+            query = "select tabelbarang.Kode, tabelbarang.NamaBarang, tabelbarang.HargaBeli, tabelpembeliandetail.Jumlah, tabelpembeliandetail.TotalHarga FROM tabelbarang JOIN tabelpembeliandetail\n" +
+"    ON tabelbarang.Kode = tabelpembeliandetail.KodeBarang where NoTransaksi = '"+InputNomorTransaksi.getText()+"'";
             ResultSet dat= connect.createStatement().executeQuery(query);
             while(dat.next()){
                 String[] data={dat.getString(1),dat.getString(2),dat.getString(3),dat.getString(4),dat.getString(5)};
